@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clothes detection app</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='main.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Clothes detection app</h1>
+      <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <input type="submit" value="Detect" />
+      </form>
+      {% if original_image_base64 %}
+      <h2>Original Image</h2>
+      <img
+        src="data:image/jpeg;base64,{{ original_image_base64 }}"
+        alt="Original Image"
+        width="600"
+      />
+      <h2>Detection result</h2>
+      <img
+        src="data:image/png;base64,{{ segmented_image_base64 }}"
+        alt="Segmented Image"
+        width="600"
+      />
+      <h2>Class Labels</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th>Label</th>
+            <th>Mask</th>
+          </tr>
+          {% for part in parts %}
+          <tr>
+            <td>{{ part.name }}</td>
+
+            <td>
+              <img
+                src="data:image/png;base64,{{ part.base64 }}"
+                alt="{{ part.name }}"
+                width="600"
+              />
+            </td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+      {% endif %} {% if error %}
+      <p>{{ error }}</p>
+      {% endif %}
+    </div>
+  </body>
+</html>
